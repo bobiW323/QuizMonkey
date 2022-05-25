@@ -1,0 +1,24 @@
+{% extends 'quizmonkey/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container" style="padding-top: 9em; padding-bottom: 15em; font-family: Futura" >
+    <a href="{% url 'main-page' %}">
+    <div class="btn btn-danger text-center">Back
+    <i class="fa fa-chevron-circle-left" style="font-size:24px"></i>
+    </div>
+        </a>
+        <div class="fs-2 text-center my-3"><strong>Enter the PIN code to start the test</strong></div>
+        <div class="text-center my-4  fs-5">
+            <form method="post" action="{% url 'quiz_filling_submit' %}">
+                <input type="text" id="pin_input" name="pin_input"  class="my-4 " placeholder="Enter the PIN here...">
+                <br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+                {% csrf_token %}
+            </form>
+            <br>
+        </div>
+        <div><p class="text-danger text-center" style="font-size: x-large">{{error}}</p></div>
+    </div>
+
+{% endblock %}

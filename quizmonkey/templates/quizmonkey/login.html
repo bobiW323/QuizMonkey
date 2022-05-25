@@ -1,0 +1,64 @@
+{% extends "quizmonkey/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container" style="padding-top: 13em; padding-bottom: 16em;">
+        <div class="row justify-content-center">
+            <div class="col col-lg-5 align-self-center">
+                <h2 class="text-center">Login</h2>
+                <form method="post" action="{% url 'login' %}">
+                    {% for field in form.visible_fields %}
+                        <div class="my-5">
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for err in field.errors %}
+                                    <p class="text-danger">{{ err }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                        <div>
+                            {% for err in form.non_field_errors %}
+                                <p class="text-danger">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+
+                    {% for hidden_field in form.hidden_fields %}
+                        <div>
+                            {% for err in  hidden_field.errors %}
+                                <p class="text-danger">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="row mb-4">
+                        <div class="col d-flex justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="rememberCheck"
+                                       name="rememberMe" checked/>
+                                <label class="form-check-label" for="rememberCheck">
+                                    Remember me
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col text-center">
+                            <a href="{% url 'register' %}" class="text-decoration-none">Sign up</a>
+                        </div>
+                    </div>
+                    {% csrf_token %}
+                    <div class="d-grid col-12 mx-auto">
+                        <button type="submit" class="btn btn-primary ">Submit</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

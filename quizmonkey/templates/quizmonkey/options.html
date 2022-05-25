@@ -1,0 +1,68 @@
+{% extends "quizmonkey/base.html" %}
+{% load static %}
+
+{% block content %}
+    <header id="home" class="home" style="padding-top: 0em; padding-bottom: 10em;"></header>
+    <div class="container" style="padding-bottom: 3em">
+<div class="ui center aligned basic very padded segment">
+    <h1 class="ui header dividing" style="font-family: Futura"><strong>Add options to question</strong></h1><br>
+    <div class="ui container left aligned" style="font-family: Futura">
+        <h4 class="ui header">
+           Question: <mark>{{ question.question_text }}</mark>
+        </h4>
+        <ul>
+            {% for choice in choices %}
+            <li>
+            {% if choice.is_answer %}
+                <h style="color: brown">
+                {% endif %}
+                {{ forloop.counter }}) {{choice.choice_text}}
+            {% if choice.is_answer %}
+                </h>
+            {% endif %}
+            <form method="post" action="{% url 'delete-option' choice.id %}" style="display: inline-block;">
+                        {% csrf_token %}
+                        <button class="btn btn-warning" style="font-family: Futura"><i class="fa fa-trash"></i></button>
+                    </form>
+            </li>
+            {% endfor %}
+        </ul>
+    <div id="option-form">
+        <form class="ui form {% if form.errors %}error{% endif %}" method="post" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="field {% if field.errors %}error{% endif %}" style="font-family: Futura">
+                <label>{{ field.label_tag }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}<br>
+            <button type="submit" class="btn btn-success">Add new option</button>
+            <button type="reset" class="btn btn-primary">Reset</button>
+            <div class="ui message error">
+            {% if form.errors %}
+                <div class="header">We had some issues</div>
+                <ul class="list">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ field.label_tag }} {{ error }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            </div>
+        </form>
+    </div>
+        {% if choices|length > 0 %}
+        <div class="ui divider"></div><br>
+        <a href="{% url 'quiz-edit' quiz.pk %}">
+            <div class="btn btn-danger">Done adding options</div>
+        </a>
+        {% endif %}
+    </div>
+</div>
+    </div>
+{% endblock %}
+

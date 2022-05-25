@@ -1,0 +1,55 @@
+{% extends "quizmonkey/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container" style="padding-top: 13em; padding-bottom: 5em;">
+        <div class="row justify-content-center">
+            <div class="col col-lg-5 align-self-center">
+                <h2 class="text-center">Register</h2>
+                <form method="post" action="{% url 'register' %}">
+                    {% for field in form.visible_fields %}
+                        <div class="my-5">
+                            {{ field }}
+                            {% if field.errors  %}
+                                {% for err in field.errors%}
+                                <p class="text-danger">{{err}}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                        <div>
+                            {% for err in form.non_field_errors%}
+                                <p class="text-danger">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+
+                    {% for hidden_field in form.hidden_fields %}
+                        <div>
+                            {% for err in  hidden_field.errors %}
+                                <p class="text-danger">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="row mb-4">
+                        <div class="col text-center">
+                            Have an account?
+                            <a href="{% url 'login' %}" class="text-decoration-none">Sign in</a>
+                        </div>
+                    </div>
+                    {% csrf_token %}
+                    <div class="d-grid col-12 mx-auto">
+                        <button type="submit" class="btn btn-primary ">Submit</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "quizmonkey/base.html" %}
+{% load static %}
+
+{% block content %}
+<header id="home" class="home" style="padding-top: 0em; padding-bottom: 10em;"></header>
+<div class="container" style="padding-bottom: 3em">
+        <div class="card text-center">
+            <h1 class="ui header dividing" style="font-family: Georgia;background-color:#b5d1d6">Add Questions to {{ quiz.title }}</h1>
+            <div class="ui container aligned" style="font-family: Georgia">
+                <div class="error">
+                    {{ message }}
+                </div>
+                {% if QuestionForm %}
+                <div class="container quiz-create" style="padding-bottom: 3em">
+                    <div class="ui center aligned basic very padded segment">
+                        <div class="ui container left aligned">
+                            <form class="ui form {% if QuestionForm.errors %}error{% endif %}" method="post"
+                                  action="{% url 'quiz-question-create' quiz.pk %}" novalidate>
+                                {% csrf_token %}
+                                {% for field in QuestionForm %}
+                                    <div class="field {% if field.errors %}error{% endif %}"
+                                         style="font-family: Georgia">
+                                        <label>{{ field.label_tag }}</label>
+                                        &nbsp;
+                                        {{ field }}
+                                    </div>
+                                {% endfor %}<br>
+                                <button type="submit" class="btn btn-success" style="font-family: Georgia;">Create
+                                    question
+                                </button>
+                                <a href="{% url 'quiz-edit' quiz.pk %}">
+                                    <div class="btn btn-warning" style="font-family: Georgia">Cancel</div>
+                                </a>
+                                <br><br>
+                                <div class="card text-center">
+                                    {% if QuestionForm.errors %}
+                                        <div class="header" style="font-family: Georgia">We had some issues</div>
+                                        <ul class="list text-danger">
+                                            {% for field in QuestionForm %}
+                                                {% for error in field.errors %}
+                                                    <li>{{ field.label_tag }} {{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {% for error in QuestionForm.non_field_errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% if choiceForm %}
+            <div class="ui center aligned basic very padded segment option-create">
+                <h3 class="ui header dividing" style="font-family: Georgia"><strong>Add options to question</strong></h3>
+                <br>
+                <div class="ui container left aligned" style="font-family: Georgia">
+                    <h4 class="ui header">
+                        Question:
+                        <mark>{{ question.question_text }}</mark>
+                    </h4>
+                    <ul>
+                        {% for choice in choices %}
+                            <div>
+                                {{ forloop.counter }}) {{ choice.choice_text }}
+                                &nbsp;
+                                <form method="post" action="{% url 'delete-option' choice.id %}"
+                                      style="display: inline-block;">
+                                    {% csrf_token %}
+                                    <button class="btn" style="font-family:Georgia"><i class="fa fa-trash"></i></button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                    <div id="option-form">
+                        <form class="ui form {% if choiceForm.errors %}error{% endif %}" method="post" novalidate>
+                            {% csrf_token %}
+                            {% for field in choiceForm %}
+                                <div class="field {% if field.errors %}error{% endif %}" style="font-family: Georgia">
+                                    <label>{{ field.label_tag }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}<br>
+                            <button type="submit" class="btn btn-success">Add new option</button>
+{#                            <button type="reset" class="btn btn-primary">Reset</button>#}
+                            <div class="ui message error">
+                                {% if choiceForm.errors %}
+                                    <div class="header">We had some issues</div>
+                                    <ul class="list">
+                                        {% for field in choiceForm %}
+                                            {% for error in field.errors %}
+                                                <li>{{ field.label_tag }} {{ error }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% for error in choiceForm.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                    {% if choices|length > 0 %}
+                        <div class="ui divider"></div><br>
+                        <a href="{% url 'quiz-edit' quiz.pk %}">
+                            <div class="btn btn-warning">Done adding options</div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card">
+            <h1 class="ui header dividing text-center" style="font-family: Georgia;background-color:#FFE4BA;font-size:30px">Quiz Preview</h1>
+            <div class="card-body">
+                <div id="question-list">
+            </div>
+        </div>
+        </div>
+        {% if questions|length > 0 %}
+            <br><br>
+            <div class="ui divider"></div>
+            <form style="display: inline-block;" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Activate quiz</button>
+            </form>
+            <form method="post" action="{% url 'quiz-delete' quiz.pk %}" style="display: inline-block;">
+                {% csrf_token %}
+                <button class="btn btn-danger" style="font-family: Futura">Cancel Creation</button>
+            </form>
+        {% endif %}
+</div>
+
+<script>
+        // Call getList() as soon as page is finished loading to display the todolist
+        window.onload = getQuestion;
+        // ... also call getList every 5 seconds hereafter to update the list
+        window.setInterval(getQuestion, 500);
+</script>
+{% endblock %}
+

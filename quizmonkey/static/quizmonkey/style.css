@@ -1,0 +1,12 @@
+.navbar .nav-item.dropdown.show .nav-link,
+.navbar .nav-item .nav-link:hover,
+.navbar .nav-item .nav-link.active {
+	color: #71e08f;
+}
+
+.cards-1 .card {
+	padding: 1rem 1rem;
+	border: 2px solid #5e6576;
+	border-radius: 20px;
+	background-color: transparent;
+}

@@ -1,0 +1,17 @@
+{% extends "quizmonkey/base.html" %}
+{% load static %}
+
+{% block content %}
+    <header id="home" class="home" style="padding-top: 0em; padding-bottom: 10em;"></header>
+    <div class="container" style="padding-bottom: 3em">
+    <div class="ui center aligned basic very padded segment" style="font-family: Futura">
+    <h1 class="ui header">{{ survey.title }}
+        <div class="sub header">You have been invited to take this quiz</div>
+    </h1>
+    <form method="post" action="{% url 'quiz-start' survey.pk %}" style="display: inline-block;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Start quiz</button>
+    </form>
+</div>
+    </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "quizmonkey/base.html" %}
+{% load static %}
+
+{% block content %}
+<header id="home" class="home" style="padding-top: 0em; padding-bottom: 10em;"></header>
+<div class="mx-0 mx-sm-auto">
+    <div class="container align-items-center" style="padding-bottom: 3em">
+        <div class="card">
+            <div class="card-header" style="background-color:#b5d1d6">
+              <h1 class="page-header text-center" style="font-family: Georgia">Create A New Quiz</h1>
+            </div>
+                <div class="card-body">
+                    <form class="ui form {% if form.errors %}error{% endif %} text-center"  style="margin: auto; width: 500px;" method="post" novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="field {% if field.errors %}error{% endif %}" style="display: inline-block;">
+                            <label style="font-family: georgia; font-size:25px; display: inline-block;">{{ field.label_tag }}</label>
+                            <p class="text-center align-items-center" style="display: inline-block;">{{ field }}</p>
+                        </div>
+                        {% endfor %}
+                        <br>
+                        <button type="submit" class="btn btn-success text-center" style="font-family: Georgia">Create</button>
+                        &nbsp;
+                        <a href="{% url 'quiz-list' %}">
+                            <div class="btn btn-danger text-center" style="font-family: Georgia">Cancel</div>
+                        </a>
+                        <br>
+                        <div class="card mb-4 border-0">
+                            <br>
+                            <div class="ui message error">
+                            {% if form.errors %}
+                            <div class="header text-danger" style="font-family: Georgia">We had some issues</div>
+                            <ul class="list text-danger" style="font-family: Georgia; font-size: 15px">
+                                {% for field in form %}
+                                {% for error in field.errors %}
+                                <li>{{ field.label_tag }} {{ error }}</li>
+                                {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% if messages %}
+                            <script>
+                                {% for msg in messages %}
+                                    alert('{{ msg.message }}');
+                                {% endfor %}
+                            </script>
+                            {% endif %}
+                        </div>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'quizmonkey/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container" style="padding-top: 9em; padding-bottom: 15em">
+        <div class="d-flex justify-content-center my-5">
+            <h1>Let's begin!</h1>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col-lg-3 mx-4">
+                <div class="card d-flex text-center">
+                    <img height="250px" src="{% static 'quizmonkey/create_quiz.jpg' %}" class="card-img-top" alt="..." style="height: 12em">
+                    <div class="card-body">
+                        <a class="btn btn-outline-primary" href="{% url 'quiz-list' %}"><strong>Create a quiz</strong></a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-3 mx-4">
+                <div class="card d-flex text-center">
+                    <img height="250px" src="{% static 'quizmonkey/fill_quiz.jpg' %}" class="card-img-top" alt="..." style="height: 12em">
+                    <div class="card-body">
+                        <a class="btn btn-outline-primary" href="{% url 'quiz_filling_start' %}"><strong>Take a quiz</strong></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 mx-4">
+                <div class="card d-flex text-center">
+                    <img height="250px" src="{% static 'quizmonkey/survey_result.jpg' %}" class="card-img-top" alt="..." style="height: 12em">
+                    <div class="card-body">
+                        <a class="btn btn-outline-primary" href="{% url 'quiz-history' %}"><strong>Quiz history</strong></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
